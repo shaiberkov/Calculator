@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import CalculatorScreen from "./CalculatorScreen";
 import { evaluate } from "mathjs";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CalculatorButtons from "./CalculatorButtons";
 
 function Calculator() {
     const [expression, setExpression] = useState("");
@@ -44,22 +45,7 @@ function Calculator() {
         <div className="container mt-5 d-flex justify-content-center">
             <div className="card p-3 bg-dark text-light" style={{ width: "300px", borderRadius: "20px" }}>
                 <CalculatorScreen value={expression} />
-                <div className="mt-3">
-                    {buttonRows.map((row, rowIndex) => (
-                        <div key={rowIndex} className="d-flex justify-content-around mb-2">
-                            {row.map((btn, idx) => (
-                                <button
-                                    key={idx}
-                                    className="btn btn-warning rounded-circle p-0"
-                                    onClick={onButtonClick}
-                                    style={{ width: "50px", height: "50px", fontSize: "18px", lineHeight: "50px" }}
-                                >
-                                    {btn}
-                                </button>
-                            ))}
-                        </div>
-                    ))}
-                </div>
+                <CalculatorButtons buttonRows={buttonRows} onButtonClick={onButtonClick} />
             </div>
         </div>
     );
