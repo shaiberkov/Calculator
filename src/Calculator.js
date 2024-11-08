@@ -1,78 +1,68 @@
+
+import React, { useState } from "react";
 import CalculatorScreen from "./CalculatorScreen";
-import React, {useState} from "react";
-import {evaluate} from "mathjs";
+import { evaluate } from "mathjs";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Calculator() {
     const [expression, setExpression] = useState("");
     const [canSubmit, setCanSubmit] = useState(false);
-
     const onButtonClick = (event) => {
         const number = event.target.innerText;
-        if(number==="ON") {
+
+        if (number === "ON") {
             setCanSubmit(true);
-
-        }
-        if(number==="C"){
+        } else if (number === "C") {
             setExpression("");
-
-        }
-        if(canSubmit && number !== "ON" && number !== "C") {
+        } else if (canSubmit && expression === "Error") {
+            setExpression(number);
+        } else if (canSubmit && number !== "=") {
             setExpression((prev) => prev + number);
-            if (number === "=") {
-                calculateResult()
-            }
+        } else if (canSubmit && number === "=") {
+            calculateResult();
         }
-    }
+    };
+
     const calculateResult = () => {
         try {
             const evalResult = evaluate(expression);
             setExpression(evalResult);
         } catch (error) {
-            setExpression("error");
+            setExpression("Error");
         }
     };
 
+    const buttonRows = [
+        ["7", "8", "9", "C"],
+        ["4", "5", "6", "/"],
+        ["1", "2", "3", "*"],
+        ["0", ".", "=", "+"],
+        ["ON","^", "-"]
+    ];
 
-
-
-
-    return(
-        <div>
-            <div className="Calculator">
-                <CalculatorScreen value={expression}/>
+    return (
+        <div className="container mt-5 d-flex justify-content-center">
+            <div className="card p-3 bg-dark text-light" style={{ width: "300px", borderRadius: "20px" }}>
+                <CalculatorScreen value={expression} />
+                <div className="mt-3">
+                    {buttonRows.map((row, rowIndex) => (
+                        <div key={rowIndex} className="d-flex justify-content-around mb-2">
+                            {row.map((btn, idx) => (
+                                <button
+                                    key={idx}
+                                    className="btn btn-warning rounded-circle p-0"
+                                    onClick={onButtonClick}
+                                    style={{ width: "50px", height: "50px", fontSize: "18px", lineHeight: "50px" }}
+                                >
+                                    {btn}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
-            <div>
-                <button onClick={(event) => onButtonClick(event)}>7</button>
-                <button onClick={(event) => onButtonClick(event)}>8</button>
-                <button onClick={(event) => onButtonClick(event)}>9</button>
-                <button onClick={(event) => onButtonClick(event)}>C</button>
-                <button onClick={(event) => onButtonClick(event)}>ON</button>
-            </div>
-            <div>
-                <button onClick={(event) => onButtonClick(event)}>4</button>
-                <button onClick={(event) => onButtonClick(event)}>5</button>
-                <button onClick={(event) => onButtonClick(event)}>6</button>
-                <button onClick={(event) => onButtonClick(event)}>/</button>
-                <button onClick={(event) => onButtonClick(event)}>+</button>
-            </div>
-            <div>
-                <button onClick={(event) => onButtonClick(event)}>1</button>
-                <button onClick={(event) => onButtonClick(event)}>2</button>
-                <button onClick={(event) => onButtonClick(event)}>3</button>
-                <button onClick={(event) => onButtonClick(event)}>*</button>
-                <button onClick={(event) => onButtonClick(event)}>-</button>
-            </div>
-            <div>
-                <button onClick={(event) => onButtonClick(event)}>0</button>
-                <button onClick={(event) => onButtonClick(event)}>=</button>
-            </div>
-
         </div>
-
-
-    )
-
-
+    );
 }
 
 export default Calculator;
